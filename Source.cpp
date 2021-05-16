@@ -1,61 +1,11 @@
 #include <iostream>
+#include <windows.h>
 #include <string>
-#include <Windows.h>
-#include <iterator>
-#include <list>
 using namespace std;
- // с помощью STL библиотеки
-list<int> makeSTL(int n)
-{
-	list<int> res;
-	int tmp;
-	for (int i = 0; i < n; i++)
-	{
-		cout << "¬ведите элемент " << i + 1 << ": ";
-		cin >> tmp;
-		res.push_back(tmp);
-	}
-	return res;
-}
-
-void printSTL(list<int> a)
-{
-	if (a.size() == 0)
-		cout << "Cписок пустой" << endl;
-	else
-	{
-		for (list<int>::iterator it = a.begin(); it != a.end(); it++)
-			cout << *it << " ";
-		cout << endl;
-	}
-}
-void deletionSTL(list<int> &a)
-{
-	if (a.size() == 0)
-		cout << "Cписок пустой" << endl;
-	else
-	{
-		bool f = true;
-		list<int>::reverse_iterator itr = a.rbegin();
-		while (itr != a.rend())
-		{
-			if (*itr % 2 == 0)
-			{
-				a.erase(next(itr).base());
-				break;
-			}
-			itr++;
-		}			
-		cout << endl;
-	}
-}
-
-// с помощью структур
 struct List
 {
-	int data;
-	List* next;
-	List* prev;
+	char* data;
+	List* next; 
 };
 List* make(int n)
 {
@@ -65,19 +15,20 @@ List* make(int n)
 	}
 	List* first, * p;
 	first = NULL;
-	cout << "¬ведите 1 элемент: ";
 	p = new List;
+	p->data = new char[100];
+	cout << "¬ведите 1 элемент: ";
 	cin >> p->data;
 	first = p;
-	p->prev = NULL;
 	for (int i = 2; i <= n; i++)
 	{
 		p->next = new List;
-		p->next->prev = p;
 		p = p->next;
+		p->data = new char[100];
+		p->next = NULL;
+
 		cout << "¬ведите " << i << " элемент: ";
 		cin >> p->data;
-		p->next = NULL;
 	}
 	return first;
 }
@@ -100,7 +51,7 @@ void print(List* first)
 		cout << endl;
 	}
 }
-void deletion(List* list)
+void add(List* list)
 {
 	if (list == NULL)
 	{
@@ -108,25 +59,21 @@ void deletion(List* list)
 	}
 	else
 	{
-		List* evenItem = NULL;
-		while (list != NULL)
+		int i = 1;
+		List* p = list;
+		while (p != NULL)
 		{
-			if (list->data != NULL && list->data % 2 == 0) {
-				evenItem = list;
+			if (p->data != NULL && i % 2 == 1) {
+				cout << "¬ведите " << i << " элемент: ";
+				cin >> p->data;
 			}
-			list = list->next;
-		}
-		if (evenItem != NULL) {
-			if (evenItem->prev != NULL) {
-				evenItem->prev->next = evenItem->next;
-			}
-			if (evenItem->next != NULL) {
-				evenItem->next->prev = evenItem->prev;
-			}
+			p = p->next;
+			i++;
 		}
 		cout << endl;
 	}
 }
+
 int main()
 {
 	system("color F0");
@@ -134,57 +81,15 @@ int main()
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	// с помощью STL 
-    cout << "ƒвунаправленный список через STL" << endl;
 	int size;
 	do
 	{
-		cout << "¬ведите количество элементов списка ";
+		cout << "¬ведите количество элементов списка" << endl;
 		cin >> size;
 	} while (size < 1);
-	list<int> myList = makeSTL(size);
-	printSTL(myList);
-	deletionSTL(myList);
-	printSTL(myList);
-
-	// с помощью структур
-	cout << "ƒвунаправленный список через структуры " << endl;
-	int size2;
-	do
-	{
-		cout << "¬ведите количество элементов списка" << endl;
-		cin >> size2;
-	} while (size2 < 1);
-	List* list = make(size2);
-	List* list2;
+	List* list = make(size);
 	print(list);
-	deletion(list);
+	add(list);
 	print(list);
-
 	return 0;
 }
-
-
-
-
-/*
-listEven->prev->next = listEven->next;
-listEven->next->prev = listEven->prev;
-
-f = false;
-while (f) {
-	if (list->next == NULL) {
-		f = true;
-	}
-	else {
-		list = list->next();
-	}
-}
-
-while (list != NULL) {
-	if (list->data % 2 == 0) {
-
-	}
-	list = list->prev;
-}
-*/
